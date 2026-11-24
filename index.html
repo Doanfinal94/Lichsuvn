@@ -5,6 +5,193 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lịch Sử Việt Nam: Từ Thời Ngô Quyền (938) Đến Hiện Tại</title>
 
+    <!-- Cấu hình chuẩn iOS & Android PWA khi chia sẻ ra Màn hình chính -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sử Việt">
+    <meta name="theme-color" content="#8B1E1E">
+
+    <!-- Apple Touch Icon (PNG thật), Favicon & Web App Manifest -->
+    <link rel="apple-touch-icon" sizes="180x180" id="apple-touch-icon" href="">
+    <link rel="icon" type="image/png" sizes="192x192" id="favicon-png" href="">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%238B1E1E'/%3E%3Ccircle cx='50' cy='46' r='22' fill='none' stroke='%23E5C158' stroke-width='2.5'/%3E%3Ccircle cx='50' cy='46' r='8' fill='%23E5C158'/%3E%3Ctext x='50' y='84' font-size='14' font-weight='bold' text-anchor='middle' fill='%23F4EBD0' font-family='Georgia,serif'%3ESỬ VIỆT%3C/text%3E%3C/svg%3E">
+    <link rel="manifest" id="pwa-manifest" href="">
+
+    <!-- Script chạy ngay lập tức vẽ App Icon PNG sắc nét (512x512 & 180x180) bằng HTML5 Canvas -->
+    <script>
+        (function generateVietnameseHistoryAppIcons() {
+            // Hàm vẽ biểu tượng Lịch Sử Việt Nam mang họa tiết Trống Đồng Đông Sơn 12 cánh
+            function drawAppIconCanvas(size) {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return '';
+
+                const s = size / 512; // Tỷ lệ quy đổi chuẩn từ bản vẽ 512x512
+
+                // 1. Nền đỏ son chuyển sắc sang trọng (#9B1C1C -> #6B0F0F)
+                const bgGrad = ctx.createRadialGradient(256 * s, 180 * s, 30 * s, 256 * s, 256 * s, 380 * s);
+                bgGrad.addColorStop(0, '#A52020');
+                bgGrad.addColorStop(0.55, '#8B1E1E');
+                bgGrad.addColorStop(1, '#6B0F0F');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, size, size);
+
+                // Ánh sáng vàng đồng mờ nhẹ ở trung tâm
+                const glowGrad = ctx.createRadialGradient(256 * s, 215 * s, 10 * s, 256 * s, 215 * s, 190 * s);
+                glowGrad.addColorStop(0, 'rgba(229, 193, 88, 0.24)');
+                glowGrad.addColorStop(1, 'rgba(229, 193, 88, 0)');
+                ctx.fillStyle = glowGrad;
+                ctx.fillRect(0, 0, size, size);
+
+                // 2. Viền khung vàng đồng cổ điển (2 lớp khung tinh tế)
+                const goldGrad = ctx.createLinearGradient(0, 0, size, size);
+                goldGrad.addColorStop(0, '#F5DFA0');
+                goldGrad.addColorStop(0.5, '#C59B27');
+                goldGrad.addColorStop(1, '#E6C25A');
+
+                const padOuter = 26 * s;
+                const radiusOuter = 44 * s;
+                ctx.strokeStyle = goldGrad;
+                ctx.lineWidth = 6 * s;
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(padOuter, padOuter, size - padOuter * 2, size - padOuter * 2, radiusOuter);
+                } else {
+                    ctx.rect(padOuter, padOuter, size - padOuter * 2, size - padOuter * 2);
+                }
+                ctx.stroke();
+
+                const padInner = 40 * s;
+                const radiusInner = 34 * s;
+                ctx.strokeStyle = 'rgba(244, 235, 208, 0.35)';
+                ctx.lineWidth = 2.2 * s;
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(padInner, padInner, size - padInner * 2, size - padInner * 2, radiusInner);
+                } else {
+                    ctx.rect(padInner, padInner, size - padInner * 2, size - padInner * 2);
+                }
+                ctx.stroke();
+
+                // 3. Họa tiết Mặt trời Trống Đồng Đông Sơn 12 cánh bằng vàng kim ở trung tâm
+                const cx = 256 * s;
+                const cy = 205 * s;
+
+                // Vòng tròn đồng tâm ngoài cùng (họa tiết chấm tròn cổ)
+                ctx.strokeStyle = 'rgba(245, 223, 160, 0.45)';
+                ctx.lineWidth = 2.5 * s;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 134 * s, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.strokeStyle = goldGrad;
+                ctx.lineWidth = 4 * s;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 122 * s, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Vẽ 12 cánh mặt trời Đông Sơn nhọn sắc sảo
+                const rays = 12;
+                const outerR = 114 * s;
+                const innerR = 48 * s;
+                ctx.fillStyle = goldGrad;
+                for (let i = 0; i < rays; i++) {
+                    const angle = (i * 2 * Math.PI) / rays - Math.PI / 2;
+                    const halfSpread = (Math.PI / rays) * 0.46;
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx + Math.cos(angle) * outerR, cy + Math.sin(angle) * outerR);
+                    ctx.lineTo(cx + Math.cos(angle - halfSpread) * innerR, cy + Math.sin(angle - halfSpread) * innerR);
+                    ctx.lineTo(cx + Math.cos(angle + halfSpread) * innerR, cy + Math.sin(angle + halfSpread) * innerR);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // Họa tiết chữ V nhỏ xen kẽ giữa các cánh mặt trời
+                    const midAngle = angle + Math.PI / rays;
+                    ctx.beginPath();
+                    ctx.arc(cx + Math.cos(midAngle) * (88 * s), cy + Math.sin(midAngle) * (88 * s), 3.6 * s, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Tâm mặt trời vàng kim nổi khối
+                ctx.beginPath();
+                ctx.arc(cx, cy, 42 * s, 0, Math.PI * 2);
+                ctx.fillStyle = '#7A1414';
+                ctx.fill();
+                ctx.lineWidth = 4 * s;
+                ctx.strokeStyle = goldGrad;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, 30 * s, 0, Math.PI * 2);
+                ctx.fillStyle = goldGrad;
+                ctx.fill();
+
+                // Chữ "938" khắc tinh tế trong tâm mặt trời
+                ctx.fillStyle = '#6B0F0F';
+                ctx.font = `700 ${26 * s}px Georgia, "Times New Roman", serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('938', cx, cy + 1 * s);
+
+                // 4. Chữ "SỬ VIỆT" sang trọng phía dưới
+                ctx.fillStyle = '#FFFDF9';
+                ctx.font = `700 ${58 * s}px Georgia, "Times New Roman", serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('SỬ VIỆT', 256 * s, 396 * s);
+
+                // Dòng phụ mốc thời gian nhỏ
+                ctx.fillStyle = '#F5DFA0';
+                ctx.font = `600 ${21 * s}px system-ui, -apple-system, sans-serif`;
+                ctx.fillText('938  •  HIỆN TẠI', 256 * s, 444 * s);
+
+                return canvas.toDataURL('image/png');
+            }
+
+            try {
+                const icon180 = drawAppIconCanvas(180);
+                const icon512 = drawAppIconCanvas(512);
+
+                // Lưu lại bản 512px để hiển thị xem trước trong Modal
+                window.__APP_ICON_DATA_URL__ = icon512 || icon180;
+
+                // Gán trực tiếp PNG base64 vào Apple Touch Icon và Favicon
+                const appleLink = document.getElementById('apple-touch-icon');
+                if (appleLink && icon180) appleLink.setAttribute('href', icon180);
+
+                const faviconLink = document.getElementById('favicon-png');
+                if (faviconLink && icon180) faviconLink.setAttribute('href', icon180);
+
+                // Tự động tạo Web App Manifest cho Android & các trình duyệt hỗ trợ PWA
+                const manifestObj = {
+                    name: 'Lịch Sử Việt Nam (938 – Hiện Tại)',
+                    short_name: 'Sử Việt',
+                    description: 'Ứng dụng tra cứu và học tập Lịch sử Việt Nam từ thời Ngô Quyền (938) đến hiện tại.',
+                    start_url: '.',
+                    display: 'standalone',
+                    background_color: '#FAF6F0',
+                    theme_color: '#8B1E1E',
+                    icons: [
+                        { src: icon180, sizes: '180x180', type: 'image/png', purpose: 'any' },
+                        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+                    ]
+                };
+
+                const manifestLink = document.getElementById('pwa-manifest');
+                if (manifestLink) {
+                    const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+                    manifestLink.setAttribute('href', URL.createObjectURL(manifestBlob));
+                }
+            } catch (err) {
+                // Giữ nguyên fallback SVG nếu môi trường hạn chế Canvas
+            }
+        })();
+    </script>
+
     <!-- Google Fonts: Playfair Display (Tiêu đề cổ điển) & Be Vietnam Pro (Nội dung tiếng Việt chuẩn đẹp) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -306,9 +493,20 @@
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="mt-12 border-t border-borderwarm bg-ivory/80 py-6 text-center text-xs sm:text-sm text-ink-muted">
-        <div class="max-w-6xl mx-auto px-4">
-            <p class="font-serif text-ink font-semibold">“Dân ta phải biết sử ta, cho tường gốc tích nước nhà Việt Nam.”</p>
-            <p class="mt-1.5 opacity-80">Ứng dụng tra cứu &amp; học tập Lịch sử Việt Nam (938 – Hiện tại)</p>
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+                <p class="font-serif text-ink font-semibold">“Dân ta phải biết sử ta, cho tường gốc tích nước nhà Việt Nam.”</p>
+                <p class="mt-1 opacity-80">Ứng dụng tra cứu &amp; học tập Lịch sử Việt Nam (938 – Hiện tại)</p>
+            </div>
+
+            <!-- Nút xem trước Apple Touch Icon & Hướng dẫn thêm vào Màn hình chính -->
+            <button id="open-homescreen-btn"
+                class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-borderwarm bg-paper hover:border-son/50 hover:bg-ivory text-ink text-xs font-semibold shadow-sm transition shrink-0">
+                <svg class="w-4 h-4 text-son" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+                <span>Thêm vào MH chính iPhone</span>
+            </button>
         </div>
     </footer>
 
@@ -377,6 +575,64 @@
                     <span>Sự kiện sau</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL XEM TRƯỚC APP ICON & HƯỚNG DẪN iOS ==================== -->
+    <div id="homescreen-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-ink/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="homescreen-modal-title">
+        <div class="relative w-full max-w-md bg-ivory border border-borderwarm rounded-2xl shadow-2xl overflow-hidden animate-fade-up">
+            <!-- Header -->
+            <div class="flex items-center justify-between gap-3 px-5 py-4 border-b border-borderwarm bg-[#F6EFE4]">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-son"></span>
+                    <h3 id="homescreen-modal-title" class="font-serif text-lg font-bold text-ink">Thêm vào Màn hình chính</h3>
+                </div>
+                <button id="homescreen-close-btn" class="p-1.5 rounded-xl border border-borderwarm bg-ivory text-ink-muted hover:text-son hover:border-son/40 transition" title="Đóng">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-5 space-y-5">
+                <!-- Khung mô phỏng Màn hình chính iPhone -->
+                <div class="rounded-2xl bg-gradient-to-br from-[#2B1D1B] via-[#3B2622] to-[#1D1514] p-5 text-center border border-gold/30 shadow-inner">
+                    <div class="text-[11px] uppercase tracking-widest text-gold-light/80 mb-3">Xem trước trên Màn hình chính iPhone</div>
+                    <div class="inline-flex flex-col items-center">
+                        <img id="app-icon-preview-img" src="" alt="Biểu tượng ứng dụng Sử Việt"
+                             class="w-20 h-20 rounded-[18px] shadow-xl ring-1 ring-white/20 object-cover bg-[#8B1E1E]">
+                        <span class="mt-2 text-xs font-medium text-white tracking-tight drop-shadow">Sử Việt</span>
+                    </div>
+                </div>
+
+                <!-- Hướng dẫn 3 bước trên Safari iOS -->
+                <div class="space-y-3 text-sm text-ink">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-ink-muted">Hướng dẫn cài nhanh trên Safari iOS</div>
+
+                    <div class="flex items-start gap-3 bg-paper border border-borderwarm/80 rounded-xl p-3">
+                        <span class="w-6 h-6 rounded-full bg-son text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                        <div>
+                            <div class="font-semibold text-ink">Nhấn nút Chia sẻ (Share)</div>
+                            <p class="text-xs text-ink-muted mt-0.5">Chạm vào biểu tượng hình vuông có mũi tên hướng lên ở thanh công cụ dưới cùng của Safari.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 bg-paper border border-borderwarm/80 rounded-xl p-3">
+                        <span class="w-6 h-6 rounded-full bg-son text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                        <div>
+                            <div class="font-semibold text-ink">Chọn “Thêm vào MH chính”</div>
+                            <p class="text-xs text-ink-muted mt-0.5">Cuộn xuống danh sách tùy chọn và chọn <strong>Thêm vào MH chính</strong> (Add to Home Screen).</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 bg-paper border border-borderwarm/80 rounded-xl p-3">
+                        <span class="w-6 h-6 rounded-full bg-gold text-ink text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+                        <div>
+                            <div class="font-semibold text-ink">Nhấn “Thêm” (Add) để hoàn tất</div>
+                            <p class="text-xs text-ink-muted mt-0.5">Biểu tượng <strong>Sử Việt</strong> với họa tiết Trống Đồng sẽ xuất hiện ngay trên màn hình chính iPhone/iPad.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1699,8 +1955,40 @@
                 if (e.target.id === 'event-modal') closeEventModal();
             });
 
+            // Modal Xem trước App Icon & Hướng dẫn Thêm vào Màn hình chính iPhone
+            const homescreenModal = document.getElementById('homescreen-modal');
+            const openHomescreenBtn = document.getElementById('open-homescreen-btn');
+            const closeHomescreenBtn = document.getElementById('homescreen-close-btn');
+            const previewImg = document.getElementById('app-icon-preview-img');
+
+            if (previewImg && window.__APP_ICON_DATA_URL__) {
+                previewImg.src = window.__APP_ICON_DATA_URL__;
+            }
+
+            function openHomescreenModal() {
+                homescreenModal.classList.remove('hidden');
+                homescreenModal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeHomescreenModal() {
+                homescreenModal.classList.add('hidden');
+                homescreenModal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+
+            openHomescreenBtn.addEventListener('click', openHomescreenModal);
+            closeHomescreenBtn.addEventListener('click', closeHomescreenModal);
+            homescreenModal.addEventListener('click', (e) => {
+                if (e.target.id === 'homescreen-modal') closeHomescreenModal();
+            });
+
             // Phím tắt Esc / Mũi tên trái phải khi mở Modal
             document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !homescreenModal.classList.contains('hidden')) {
+                    closeHomescreenModal();
+                    return;
+                }
                 if (state.modalEventId === null) return;
                 if (e.key === 'Escape') closeEventModal();
                 if (e.key === 'ArrowLeft') document.getElementById('modal-prev-btn').click();
